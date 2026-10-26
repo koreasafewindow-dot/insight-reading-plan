@@ -1,0 +1,444 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>통찰책 1년 완독</title>
+<style>
+:root{--bg:#f6f5f1;--fg:#1d1d1b;--card:#fff;--mut:#6b6b66;--ac:#2f6f5e;--bd:#e2e0d8;--hl:#e8f3ee;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171816;--fg:#ecebe5;--card:#222320;--mut:#9a9a92;--ac:#6fc4ab;--bd:#33342f;--hl:#1f2b27}}
+:root[data-theme="dark"]{--bg:#171816;--fg:#ecebe5;--card:#222320;--mut:#9a9a92;--ac:#6fc4ab;--bd:#33342f;--hl:#1f2b27}
+html{scroll-padding-top:calc(150px + env(safe-area-inset-top,0px))}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Noto Sans KR","Malgun Gothic",sans-serif;-webkit-tap-highlight-color:transparent}
+.w{max-width:680px;margin:0 auto;padding:12px max(12px,env(safe-area-inset-right)) 20px max(12px,env(safe-area-inset-left))}
+header{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:8px 0;z-index:5}
+h1{font-size:18px;margin:4px 0 8px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px 12px}
+.bar{height:10px;background:var(--bd);border-radius:6px;overflow:hidden;margin:8px 0 4px}
+.bar i{display:block;height:100%;background:var(--ac);width:0;transition:width .3s}
+.big{font-size:22px;font-weight:700;color:var(--ac)}
+.row2{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:6px}
+button,input[type=date]{font:inherit;font-size:16px;color:var(--fg);background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:9px 12px;min-height:42px;touch-action:manipulation}button{cursor:pointer;-webkit-appearance:none;appearance:none}
+.m{color:var(--mut);font-size:13px}
+.mon{display:flex;gap:7px;overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;padding:8px 0 5px}.mon button{flex:none;padding:8px 12px}
+.d{display:flex;gap:10px;align-items:center;padding:11px 10px;border:1px solid var(--bd);background:var(--card);border-radius:12px;margin:7px 0;scroll-margin-top:calc(170px + env(safe-area-inset-top))}
+.d.t{background:var(--hl);border-color:var(--ac)}.d.x .tt{text-decoration:line-through;opacity:.55}
+.d input{width:25px;height:25px;accent-color:var(--ac);flex:none;touch-action:manipulation}
+.d .b{flex:1;min-width:0}.tt{font-weight:600;word-break:keep-all}
+.d a{color:var(--ac);text-decoration:none;font-size:13px;white-space:nowrap}
+.go{border:1px solid var(--ac);border-radius:9px;padding:8px 10px;font-weight:600;min-height:40px;display:inline-flex;align-items:center;justify-content:center;flex:none} .d a:not(.go){padding:8px 2px;min-height:40px;display:inline-flex;align-items:center}
+@media(max-width:420px){.w{padding-left:10px;padding-right:10px}h1{font-size:18px}.card{padding:10px}.row2{gap:7px}.row2 label{display:flex;align-items:center;gap:5px;flex-wrap:wrap}.d{gap:8px;padding:10px 8px}.d .m{font-size:12px}.tt{font-size:15px}.go{padding:7px 8px}}\n</style></head><body><div class="w">
+<header id="hdr"><h1>📖 통찰책 1년 완독 계획</h1><div class="m" id="tl"></div><div class="card">
+<div><span class="big" id="pct">0%</span> <span class="m" id="cnt"></span></div>
+<div class="bar"><i id="fill"></i></div><div class="m" id="sub"></div>
+<div class="row2"><label class="m">시작일 <input type="date" id="start"></label>
+<button id="today">오늘로 이동</button><button id="only">미완료만</button></div></div><div class="mon" id="mon"></div></header>
+<div id="list"></div>
+<p class="m">체크 기록은 이 기기의 브라우저에 저장됩니다. 아이폰에서는 Safari로 열고, 필요하면 공유 버튼 → “홈 화면에 추가”를 선택해 앱처럼 사용할 수 있습니다. Safari의 방문 기록/웹 사이트 데이터 삭제 시 체크 기록이 지워질 수 있습니다. 172일차부터는 원본 계획표가 아닌 통찰책 분량을 기준으로 나눈 일정입니다. “앱” 버튼은 JW 라이브러리 앱을, “웹”은 온라인 라이브러리를 엽니다.</p>
+<button id="reset">기록 초기화</button></div>
+<script>
+const RAW=`가나 ~ 가난|000873
+가다라 사람들 ~ 가르치는 사람, 가르침|001584
+가리아 사람 경호대 ~ 가슴받이|000890
+가시, 가시나무~가족|004386
+가죽 부대~갈그미스|004616
+갈네 ~ 갈리오|000868
+갈릴리 ~ 감송|001598
+감옥 ~ 개밀|003557
+개선 행렬 ~ 거룩하게 함|004479
+거룩한 곳 ~ 거룩함|002060
+거리 ~ 거짓말|004246
+건축,건축술 ~ 게르손 사람들|000350
+게르솜 ~ 겨자|001662
+격자창 ~ 결혼|002689
+겸손 ~ 경건한 정성|002102
+경계 ~ 경비, 경비병|000798
+경외서, 외경 ~ 계시, 나타남|000305
+계약 ~ 계피|001054
+고고학|000344
+고나냐 ~ 고린도 사람들에게 보낸 편지|001019
+고립 도시 ~ 고핫|001357
+고핫 사람 ~ 골로새 사람들에게 보낸 편지|002646
+골리앗 ~ 공의|001739
+공작 ~ 광야|003410
+광주리 ~ 구니 사람들|000576
+구더기 ~ 구아르도|002833
+구원자 ~ 군인|003848
+굴롯-마임 ~ 그늘, 그림자|001782
+그니스 사람 ~ 그릇|002592
+그리스, 그리스인|001765
+그리스도 ~ 그리스보|000966
+그리스어 ~ 극장|001767
+근면 ~ 기구|002169
+기근 ~ 기도|001489
+기돈 ~ 기랴다임|000950
+기럇 ~ 기름나무|002622
+기름부음 ~ 기스바|000285
+기슬레우월 ~ 긴느돈|000960
+길,1 ~ 까마귀|002619
+깨끗함 ~ 끊어짐|000990
+나감향 ~ 나라들, 이방 사람들|003333
+나라들의 지정된 때 ~ 나병|000316
+나보니두스 ~ 나손|003156
+나실인 ~ 나일 운하|003191
+나타나심 ~ 아브라함의 이동 경로|002887
+약속의 땅의 지리적 특징 ~ 낙성식|000761
+낙원 ~ 날, 낮|003377
+날실 ~ 넓적다리|004575
+네게브 ~ 노바|003209
+노브 ~ 누가|003273
+누가에 의한 좋은 소식 ~ 눈동자|002791
+눈멀다 ~ 느이엘|000773
+느헤미야 ~ 니므롯|003212
+니므림 ~ 다리|003258
+다리를 절다 ~ 다릭|002672
+다림줄 ~ 다아낫-실로|003514
+다윗 ~ 다툼, 싸움|001130
+다하스 ~ 달란트|004302
+달레트 ~ 대머리|001108
+대부 ~ 대야, 넓적한 그릇|002759
+대제사장|002023
+대추야자 ~ 데만|001126
+데만 사람 ~ 도겐|004357
+도공 ~ 도비야|003537
+도시 ~ 독수리|000981
+독신 ~ 동굴|004138
+동맹 ~ 돼지|000198
+되새김질 ~ 드루보사|001083
+드루실라 ~ 등잔|001227
+등잔대 ~ 디도에게 보낸 편지|002677
+디드라크마 ~ 디산|001175
+디셉 사람 ~ 띠|004427
+라갈 ~ 라맛-미스베|003619
+라먀 ~ 라브다넘|003636
+라사 ~ 랍보니|002684
+랍비 ~ 레위기|003613
+레위 사람들 ~ 로마 사람|002731
+로마 사람들에게 보낸 편지 ~ 룻기|003762
+룻다 ~ 리배|002797
+리브가 ~ 마가스|003658
+마가에 의한 좋은 소식 ~ 마르알|002909
+마리아 ~ 마일|002918
+마지막 날 ~ 마하나임|002686
+마하네-단 ~ 말|002843
+말감 ~ 말씀|002862
+맛다나 ~ 매복, 복병|002930
+매장, 매장지 ~ 매춘부|000842
+매혹적인 것 ~ 먼지, 흙, 흙먼지|000925
+멍에 ~ 메로놋 사람|004639
+메로스 ~ 메주자|003005
+메추라기 ~ 면류관|003598
+멸망 ~ 모사, II|001160
+모세 ~ 모아댜|003118
+모압 ~ 목자|003097
+목자들이 양을 묶는 집 ~ 몹시 혐오스러운 것|000742
+못, I ~ 무기, 갑주|003174
+무기 든 자 ~ 묵상|000374
+문, 성문, 성문 통로 ~ 문지기|001617
+물 ~ 므나헴|004582
+므낫세 ~ 므오노대|002882
+므오느님의 큰 나무 ~ 이스라엘에게 주신 땅(소제목)|002983
+재판관들이 이스라엘을 압제에서 구출하다 ~ 예루살렘시(소제목)|001393
+미르마 ~ 미움|003075
+미침, 광기 ~ 믿음|002827
+밀 ~ 바드로바|004599
+바드로스 ~ 바벨|003400
+바빌론 ~ 바아라|000530
+바아래 ~ 바우|003356
+바울 ~ 바위너구리|003406
+바쳐진 것 ~ 반역|001165
+반죽 통 ~ 발판|002639
+발효된 반죽 ~ 배, II|004193
+배교 ~ 뱀|000309
+뱃사람 ~ 범죄와 처벌|002901
+법, 율법|002694
+율법 계약의 특징들|002694~44
+법규 ~ 베고랏|004226
+베냐민 ~ 베두엘|000640
+베드로 ~ 베라|003451
+베레갸 ~ 벨레스|000650
+벨렉 ~ 벳-세메스 사람|003422
+벳-스안 ~ 변형|000709
+별 ~ 보관, 보호|004224
+보그루 ~ 복수|000781
+복음 전파자 ~ 봉사자, 섬기는 사람|001449
+봉헌, 헌신 ~ 부겔로|001144
+부관 ~ 부패하지 않음|000102
+부활|003709
+북기 ~ 불|000834
+불 그릇 ~ 분열된 왕국|001524
+예언자 엘리야와 엘리사의 활동 ~ 고고학으로부터 유익을 얻음|001698
+브니누 ~ 블라스도|000639
+블라야 ~ 비늘, 미늘|003418
+비단 ~ 비하히롯|004119
+빅다 ~ 빌립|000728
+빌립보 ~ 빵|003467
+빵 굽기, 빵 굽는 사람 ~ 사냥개|000542
+사냥과 고기잡이 ~ 사도행전|002104
+사독 ~ 사람의 아들|004652
+사랍 ~ 사랑의 잔치|003838
+사레셀 ~ 사메크|003954
+사면 ~ 사무엘서|000241
+사물의 제도들 ~ 사압|004288
+사울 ~ 사탄|003847
+사파이어 ~ 산당, 높은 곳|003836
+산발랏 ~ 살만|003826
+살만에셀 ~ 삽|003936
+삽, 넉가래 ~ 색깔|004084
+샌들 ~ 생명|003830
+생일 ~ 서명|000749
+서약, 맹세 ~ 석류|003286
+석수 ~ 성경|002922
+성구 갑 ~ 성서|003861
+성서 사본 ~ 성서 역본|002893
+성전|004359
+성전 대장 ~ 세산|000886
+세상 ~ 셀라, II|004627
+셀레먀 ~ 소렉 급류 골짜기|003990
+소리 사람들 ~ 속담|004768
+속죄 ~ 손 씻는 일|000461
+손에 능력을 채워 줌 ~ 솔로몬|001520
+솔로몬의 노래 ~ 수간|004181
+수갓 사람들 ~ 수에네|004255
+수염 ~ 순종|000590
+술 ~ 스가냐|004101
+스가랴 ~ 스레다|004681
+스레라 ~ 스보이임|004709
+스보임 ~ 승천|004676
+시간, 시 ~ 시돈, 시돈 사람들|002094
+시드기야 ~ 시므온, I|004685
+시므온, II ~ 시완월|004281
+시편 ~ 시홀|003572
+시홀-리브낫 ~ 신들과 여신들|004033
+신명기 ~ 신성한 기둥|001163
+신성한 목상 ~ 실렘|003789
+실로 ~ 심장, 마음|004039
+심지 집게 ~ 십자가|004171
+싯나 ~ 씨|004152
+씨 뿌리는 자, 씨뿌리기 ~ 아나김|004197
+아나냐 ~ 아닥사스다|000266
+아달랴 ~ 아드람멜렉|000457
+아드롯-벳-요압 ~ 아라비아|000463
+아라비아 사람|000328
+아라우나 ~ 아랏|000339
+아레다 ~ 아르왓|000356
+아르왓 사람 ~ 아말렉|000395
+아맘 ~ 아므라벨|000217
+아므람 ~ 아벨|000251
+아벨-그라밈 ~ 아브월|000020
+아비 ~ 아비-알본|000027
+아비야 ~ 아사랴|000041
+아사렐 ~ 아스도렛|000401
+아스돗 ~ 아시리아|000412
+아시마 ~ 아첨|000420
+아카바 만 ~ 아하스배|000319
+아하시야 ~ 아힐룻|000145
+악 ~ 안개|004603
+안나 ~ 안티-레바논|000283
+안티오크 ~ 암모님|000292
+암몬 ~ 압비아|000238
+압살롬 ~ 애가|000063
+애기수영 ~ 야고보|004188
+야고보의 편지 ~ 야곱|002314
+야곱의 샘 ~ 야스엘|002280
+야스엘 사람들 ~ 얍느엘|002299
+얍복 급류 골짜기 ~ 양식, 음식, 식품|002268
+양식 자루 ~ 어머니|001542
+언덕 ~ 얼룩말|002027
+얼음 ~ 에델|002130
+에돔 ~ 에발|001258
+에발 산 ~ 에봇, I|001245
+에봇, II ~ 에셱|001399
+에스겔 ~ 에스더기|001469
+에스돈 ~ 에텔|001428
+에티오피아 ~ 엘닷|001438
+엘돌랏 ~ 엘르앗|001342
+엘리, I ~ 엘리사반|001290
+엘리사밧 ~ 엘리웃|001319
+엘리호렙 ~ 여레못|001305
+여로보암 ~ 여아림|002431
+여예언자 ~ 여자|003563
+여할렐렐 ~ 여호수아|002362
+여호수아서 ~ 여호야립|002524
+여호와|002391
+여호와께서 친히 거기에 계시다 ~ 역대기|002392
+역법, 달력 ~ 연기|000866
+연대 계산, 연대 기술, 연대학|000970
+연대추나무 ~ 열 가지 말씀|002779
+열두 제자 ~ 염려|004495
+염료, 염색 ~ 메디아·페르시아 제국|001234
+영|004211
+영감 ~ 영매술|002178
+영양 ~ 영혼의 집|000288
+예|002147
+예델 ~ 예렛|002452
+예루살렘|002436
+예리코 ~ 예수|002426
+예수 그리스도|002451
+예수 그리스도의 족보 ~ 예수아|001647
+예언 ~ 예언자|003561
+예지, 예정|001549
+예후 ~ 오디새|002401
+오래 참음 ~ 오브니|002769
+오브라 ~ 온유|003338
+온화 ~ 옹기 조각|003055
+와냐 ~ 완전함, 완전성|004544
+왕 ~ 왕좌, 자리|002613
+왜사다 ~ 요나|004539
+요나단 ~ 요라|002506
+요람 ~ 요섹|002510
+요셉 ~ 요시비야|002515
+요시야 ~ 요엘서|002525
+요엣 ~ 요한|002480
+요한에게 주어진 계시 ~ 요한에 의한 좋은 소식|003717
+요한의 편지들 ~ 욥|002491
+욥기 ~ 우리엘|002476
+우림과 둠밈 ~ 우상, 우상 숭배|004524
+우상에게 바친 고기 ~ 로마 제국|002137
+움마 ~ 위선자|004506
+위성류나무 ~ 유다, I|004314
+유다, II ~ 유대인|002541
+유두고 ~ 유출|001448
+유프라테스 ~ 은퇴|001446
+은행, 은행가 ~ 음행|000554
+의(義) ~ 의롭다고 선언함|003733
+의복 ~ 이드로|001224
+이드르암 ~ 이리야|002243
+이마 ~ 이사야서|001547
+이삭 ~ 이스라 사람|002203
+이스라엘 ~ 이스마야|002227
+이스마엘 ~ 이자|002215
+이집트, 이집트인|001265
+이집트 강 ~ 이코니온|003746
+이탈리아 ~ 이혼|002234
+익게스 ~ 읽기, 낭독|002144
+임나, I ~ 임재|002156
+임직식 ~ 입맞춤|002179
+입법자 ~ 잇바스|002695
+잇사갈 ~ 자루|002230
+자루천 ~ 자비의 선물|003787
+자세와 동작|000467
+자수 ~ 잠두|001349
+잠언|003569
+잡초 ~ 장식품|004592
+장신구 ~ 쟁기|002460
+쟁기질 ~ 저주의 말|003513
+적 ~ 전능자|001362
+전도서 ~ 전리품|001255
+전쟁 ~ 전조|004573
+전통 ~ 점, 점술|004463
+점성술사 ~ 정경|000448
+정련, 정련하는 자 ~ 젖, 젖가슴|003672
+젖을 뗌 ~ 제레스|004589
+제렛 급류 골짜기 ~ 제비 축제|004707
+제사장|003553
+제사장들의 도시 ~ 조언, 의도, 조언자|003554
+족보 ~ 족장|001646
+존경, 존중 ~ 좋은 소식|003707
+죄|004132
+죄과 ~ 주권|001779
+주문(呪文), 주물(呪物) ~ 주제넘음|000926
+주조한 바다 (구리 바다) ~ 줄, 끈, 밧줄|003105
+줄마노 ~ 지구, 땅|003334
+지도자, 귀인, 방백, 군왕 ~ 지역|002701
+지옥 ~ 지푸라기|001978
+지혜|004618
+지휘관 ~ 진리, 진실, 참|001012
+진설빵 ~ 질병과 치료|004085
+질투 ~ 짐 꾸러미|002348
+짐승, 상징적 ~ 집|000591
+집비둘기 ~ 창고|003483
+창고 도시 ~ 창자|004239
+창조, 창조물 ~ 채찍|001061
+책 ~ 천|000789
+천둥 ~ 첨필|004394
+첩, 후궁 ~ 초혼자|001020
+총독 ~ 축사|001749
+축제 ~ 충실하고 슬기로운 종|001504
+충절 ~ 고대 이스라엘의 일상생활|002182
+치터 ~ 친절|004749
+친척 ~ 침대|002609
+침례 ~ 칭찬|000555
+카나 ~ 칼새|002571
+캄캄한 감옥 ~ 크레타, 크레타 사람들|001231
+크발 ~ 키레네|000927
+키루스 ~ 타국인|001102
+타르 ~ 탑(塔)|004322
+태(胎) ~ 트로아스|004622
+티레 ~ 파충류|004498
+파타라 ~ 페|003399
+페니키아 ~ 페르시아, 페르시아 사람들|003475
+페스투스 ~ 평야, 평원|001512
+평화, 평안 ~ 포도주와 독한 술|003409
+포로 ~ 표|000887
+표범 ~ 플라타너스나무|002719
+피 ~ 하갈|000774
+하갑 ~ 하느님, 신|001809
+하느님께 나아감 ~ 하느님의 선물|000317
+하느님의 아들(들)|004182
+하느님의 왕국|002615
+하느님의 이스라엘 ~ 하늘|002229
+하늘의 여왕 ~ 하르네벨|003606
+하르-마게돈 ~ 하박국서|001884
+하볼 ~ 하-엘렙|001792
+하와 ~ 할렐루야|001450
+할례 ~ 해골터|000977
+해면 ~ 향나무|004215
+향로 ~ 헤로디온|000910
+헤롯|002000
+헤롯 당원들 ~ 헬갓|002001
+헬갓-핫수림 ~ 현악기|001977
+혐오스러운 것 ~ 형제|001193
+형제 역연혼 ~ 호세아|002729
+호세아서 ~ 화목 덮개|002087
+화살 ~ 환난|000386
+환상 ~ 회, 모임, 무리|004564
+회개|003691
+회당 ~ 회중|004282
+효모 ~ 흉갑|004636
+흑단 ~ 희망|001252
+희생 ~ 히브리 사람들에게 보낸 편지|003793
+히브리어|001953
+히브리어 성경 ~ 히스기|001955
+히스기야 ~ 힐책|002011
+힘, 능력, 강력한 일 ~ 힛데겔|003540`;
+// 1~171일차: 원본 계획표(jwinsight) 기준 / 172~365일차: 통찰책 원본(jwpub)의 표제어 순서와 분량으로 균등 분할
+const D=RAW.split("\n").map(l=>{const[t,c]=l.split("|"),[id,p]=c.split("~");return{t,id,p}}),N=365,K="insight365";
+const $=i=>document.getElementById(i);
+let S={start:null,done:{}},only=false;
+try{const r=localStorage.getItem(K);if(r)S=JSON.parse(r)}catch(e){}
+const pad=n=>String(n).padStart(2,"0"),iso=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+if(!S.start)S.start=iso(new Date());
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
+const P=s=>{const[a,b,c]=s.split("-").map(Number);return new Date(a,b-1,c)};
+const link=(x,app)=>(app?"jwlibrary:///":"https://www.jw.org/")+"finder?srcid=jwlshare&wtlocale=KO&prefer=lang&docid=1200"+x.id+(x.p?"&par="+x.p:"");
+const W="일월화수목금토";
+function todayIdx(){const a=P(S.start),b=new Date();return Math.floor((Date.UTC(b.getFullYear(),b.getMonth(),b.getDate())-Date.UTC(a.getFullYear(),a.getMonth(),a.getDate()))/864e5)}
+function render(){
+ const s=P(S.start),ti=todayIdx();let h="";
+ for(let i=0;i<N;i++){
+  const dt=new Date(s.getFullYear(),s.getMonth(),s.getDate()+i),x=D[i],dn=!!S.done[i];
+  if(only&&dn)continue;
+  h+=`<div class="d${i===ti?" t":""}${dn?" x":""}" id="r${i}" data-m="${dt.getFullYear()}-${dt.getMonth()+1}"><input type="checkbox" data-i="${i}"${dn?" checked":""}><div class="b"><div class="m">${i+1}일차 · ${dt.getFullYear()}.${dt.getMonth()+1}.${dt.getDate()} (${W[dt.getDay()]})${i===ti?" · 오늘":""}${i>170?" · 분량 균등 분할":""}</div><div class="tt">${x?x.t:"표제어 준비 중"}</div></div>${x?`<a class="go" href="${link(x,1)}">앱</a><a href="${link(x,0)}" target="_blank" rel="noopener">웹</a>`:""}</div>`;
+ }
+ $("list").innerHTML=h||'<p class="m">모두 읽으셨습니다! 🎉</p>';stats();months();hpad();
+}
+function hpad(){document.documentElement.style.scrollPaddingTop="calc("+($("hdr").offsetHeight+8)+"px + env(safe-area-inset-top,0px))"}
+function months(){
+ const s=P(S.start),seen=[],sy=s.getFullYear();let b="";
+ for(let i=0;i<N;i++){const d=new Date(s.getFullYear(),s.getMonth(),s.getDate()+i),k=d.getFullYear()+"-"+(d.getMonth()+1);if(!seen.includes(k)){seen.push(k);b+=`<button data-m="${k}">${d.getMonth()+1}월${d.getFullYear()!==sy?"<sup>'"+String(d.getFullYear()).slice(2)+"</sup>":""}</button>`}}
+ $("mon").innerHTML=b;
+ const t=new Date();$("tl").textContent="오늘 "+t.getFullYear()+"년 "+(t.getMonth()+1)+"월 "+t.getDate()+"일 ("+W[t.getDay()]+")"+(todayIdx()>=0&&todayIdx()<N?" · "+(todayIdx()+1)+"일차":"");
+}
+$("mon").onclick=e=>{const k=e.target.closest("button");if(!k)return;if(only){only=false;$("only").textContent="미완료만";render()}const r=document.querySelector('.d[data-m="'+k.dataset.m+'"]');r&&r.scrollIntoView({behavior:"smooth",block:"start"})};
+addEventListener("resize",hpad);
+function stats(){
+ const n=Object.keys(S.done).filter(k=>S.done[k]).length,ti=todayIdx(),p=n/N*100;
+ $("pct").textContent=p.toFixed(1)+"%";$("cnt").textContent=n+" / "+N+"일 완료";$("fill").style.width=p+"%";
+ if(ti<0)$("sub").textContent="시작까지 "+(-ti)+"일 남았습니다";
+ else if(ti>=N)$("sub").textContent="365일 계획 기간이 끝났습니다";
+ else{let e=0;for(let i=0;i<=ti;i++)if(S.done[i])e++;const m=ti+1-e;$("sub").textContent="오늘은 "+(ti+1)+"일차 · "+(m>0?"밀린 날 "+m+"일":"계획대로 진행 중")}
+}
+$("start").value=S.start;
+$("start").onchange=e=>{if(e.target.value){S.start=e.target.value;save();render()}};
+$("list").onchange=e=>{const i=e.target.dataset.i;if(i==null)return;if(e.target.checked)S.done[i]=1;else delete S.done[i];save();only?render():(e.target.closest(".d").classList.toggle("x",e.target.checked),stats())};
+$("today").onclick=()=>{const i=Math.min(Math.max(todayIdx(),0),N-1);only=false;$("only").textContent="미완료만";render();const r=$("r"+i);r&&r.scrollIntoView({behavior:"smooth",block:"start"})};
+$("only").onclick=()=>{only=!only;$("only").textContent=only?"전체 보기":"미완료만";render()};
+$("reset").onclick=()=>{if(confirm("체크 기록을 모두 지울까요?")){S.done={};save();render()}};
+render();setTimeout(()=>{const r=$("r"+Math.min(Math.max(todayIdx(),0),N-1));r&&todayIdx()>0&&r.scrollIntoView({block:"start"})},50);
+</script></body></html>
